@@ -1,3 +1,5 @@
+// Frontend UI was created with Cursor (https://cursor.com).
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import L from "leaflet";

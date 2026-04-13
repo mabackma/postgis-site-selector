@@ -10,7 +10,7 @@ function Recenter({ lat, lon }: { lat: number; lon: number }) {
 }
 
 type Infra = {
-  id: number;
+  id: string | number;
   name: string | null;
   lon: number;
   lat: number;
@@ -76,8 +76,14 @@ export default function App() {
         setImportErr(typeof data.detail === "string" ? data.detail : res.statusText);
         return;
       }
+      const ins = data.inserted_rows ?? 0;
+      const total = data.elements_from_overpass ?? "—";
+      const ep = data.overpass_endpoint ? ` Server: ${data.overpass_endpoint}.` : "";
+      const remark = data.overpass_remark
+        ? ` Overpass note: ${data.overpass_remark}`
+        : "";
       setImportMsg(
-        `Imported ${data.inserted_rows ?? 0} new substation rows (existing OSM ids are skipped).`,
+        `Imported ${ins} new row(s) (${total} objects returned from Overpass: nodes, ways, and relations with power=substation; existing ids are skipped).${ep}${remark}`,
       );
     } catch (err) {
       setImportErr(err instanceof Error ? err.message : "Request failed");

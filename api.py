@@ -38,14 +38,18 @@ def import_substations(body: BoundingBoxBody):
     conn = get_connection()
     try:
         cur = conn.cursor()
-        inserted = save_substations(cur, conn, bbox)
+        stats = save_substations(cur, conn, bbox)
         cur.close()
     except Exception as e:
         conn.rollback()
         raise HTTPException(status_code=502, detail=str(e)) from e
     finally:
         conn.close()
-    return {"ok": True, "inserted_rows": inserted, "bounding_box": bbox}
+    return {
+        "ok": True,
+        "bounding_box": bbox,
+        **stats,
+    }
 
 
 @app.get("/api/nearest")
